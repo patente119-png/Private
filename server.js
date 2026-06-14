@@ -1,0 +1,2 @@
+OPENAI_API_KEY=여기에_본인_OpenAI_API_키를_넣으세요
+PORT=3000
