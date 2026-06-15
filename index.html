@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 냉장고 레시피</title>
+
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.6/kakao.min.js"></script>
+
+<style>
+body{
+  font-family:sans-serif;
+  background:#f5f5f5;
+  padding:20px;
+}
+.container{
+  max-width:900px;
+  margin:auto;
+}
+h1{
+  text-align:center;
+}
+textarea{
+  width:100%;
+  height:120px;
+  padding:15px;
+  font-size:16px;
+}
+button{
+  width:100%;
+  padding:15px;
+  margin-top:10px;
+  background:#ff6b35;
+  color:white;
+  border:none;
+  font-size:18px;
+}
+.kakao-btn{
+  background:#fee500;
+  color:#111;
+}
+.card{
+  background:white;
+  padding:20px;
+  margin-top:20px;
+  border-radius:10px;
+  white-space:pre-wrap;
+  line-height:1.7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>🍳 AI 냉장고 레시피</h1>
+
+  <textarea id="ingredients" placeholder="예: 김치, 계란, 두부, 밥, 대파"></textarea>
+
+  <button onclick="generateRecipe()">레시피 생성</button>
+
+  <button class="kakao-btn" onclick="shareKakao()">카카오톡 공유하기</button>
+
+  <div id="result"></div>
+</div>
+
+<script>
+async function generateRecipe(){
+  const ingredients = document.getElementById("ingredients").value;
+
+  if(!ingredients.trim()){
+    alert("재료를 입력하세요.");
+    return;
+  }
+
+  document.getElementById("result").innerHTML =
+    "<div class='card'>AI가 레시피 생성중...</div>";
+
+  try{
+    const response = await fetch("/api/recipe", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ ingredients: ingredients })
+    });
+
+    const data = await response.json();
+
+    document.getElementById("result").innerHTML =
+      `<div class="card">${data.recipe || data.error}</div>`;
+  } catch(error){
+    document.getElementById("result").innerHTML =
+      `<div class="card">서버 연결 오류가 발생했습니다.</div>`;
+  }
+}
+
+Kakao.init("41c0575dc81aa217eac26ccc50e53b7a");
+
+function getFoodImage(recipeText){
+  if(recipeText.includes("찌개")){
+    return "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43";
+  }
+
+  if(recipeText.includes("볶음밥")){
+    return "https://images.unsplash.com/photo-1603133872878-684f208fb84b";
+  }
+
+  if(recipeText.includes("계란")){
+    return "https://images.unsplash.com/photo-1525351484163-7529414344d8";
+  }
+
+  if(recipeText.includes("국수") || recipeText.includes("면")){
+    return "https://images.unsplash.com/photo-1569718212165-3a8278d5f624";
+  }
+
+  if(recipeText.includes("두부")){
+    return "https://images.unsplash.com/photo-1546069901-ba9599a7e63c";
+  }
+
+  return "https://images.unsplash.com/photo-1546069901-ba9599a7e63c";
+}
+
+function shareKakao(){
+  const card = document.querySelector("#result .card");
+
+  if(!card){
+    alert("먼저 레시피를 생성하세요.");
+    return;
+  }
+
+  const recipeText = card.innerText;
+
+  const detailUrl =
+    "http://localhost:3000/?recipe=" +
+    encodeURIComponent(recipeText);
+
+  Kakao.Share.sendDefault({
+    objectType:"feed",
+    content:{
+      title:"🍳 AI 냉장고 레시피",
+      description:recipeText.substring(0,120)+"...",
+      imageUrl:getFoodImage(recipeText),
+      link:{
+        mobileWebUrl:detailUrl,
+        webUrl:detailUrl
+      }
+    },
+    buttons:[
+      {
+        title:"자세히 보기",
+        link:{
+          mobileWebUrl:detailUrl,
+          webUrl:detailUrl
+        }
+      }
+    ]
+  });
+}
+window.addEventListener("load", function(){
+  const params = new URLSearchParams(window.location.search);
+  const recipe = params.get("recipe");
+
+  if(recipe){
+    document.getElementById("result").innerHTML =
+      `<div class="card">${decodeURIComponent(recipe)}</div>`;
+  }
+});
+</script>
+
+</body>
+</html>
