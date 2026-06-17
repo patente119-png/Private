@@ -137,17 +137,16 @@ function shareKakao(){
     "http://localhost:3000/?recipe=" +
     encodeURIComponent(recipeText);
 
+  function shareKakao(){
   Kakao.Share.sendDefault({
-    objectType:"feed",
-    content:{
-      title:"🍳 AI 냉장고 레시피",
-      description:recipeText.substring(0,120)+"...",
-      imageUrl:getFoodImage(recipeText),
-      link:{
-        mobileWebUrl:detailUrl,
-        webUrl:detailUrl
-      }
-    },
+    objectType:"text",
+    text:"AI 냉장고 레시피 테스트",
+    link:{
+      mobileWebUrl:window.location.origin,
+      webUrl:window.location.origin
+    }
+  });
+},
     buttons:[
       {
         title:"자세히 보기",
