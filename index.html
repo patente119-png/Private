@@ -61,7 +61,7 @@ button{
 
   <button onclick="generateRecipe()">레시피 생성</button>
 
-  <button class="kakao-btn" onclick="shareKakao()">카카오톡 공유하기</button>
+ <button class="kakao-btn" onclick="shareKakao()">카카오톡 공유하기</button>
 
   <div id="result"></div>
 </div>
@@ -123,15 +123,13 @@ function getFoodImage(recipeText){
   return "https://images.unsplash.com/photo-1546069901-ba9599a7e63c";
 }
 
-function shareKakao(){
-  const card = document.querySelector("#result .card");
 
-  if(!card){
-    alert("먼저 레시피를 생성하세요.");
-    return;
-  }
+
+  
 
 function shareKakao(){
+  alert("카카오 공유 함수 실행됨");
+
   Kakao.Share.sendDefault({
     objectType:"text",
     text:"AI 냉장고 레시피 테스트",
@@ -140,7 +138,6 @@ function shareKakao(){
       webUrl:window.location.origin
     }
   });
-}
 }
 window.addEventListener("load", function(){
   const params = new URLSearchParams(window.location.search);
