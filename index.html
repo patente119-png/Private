@@ -131,13 +131,7 @@ function shareKakao(){
     return;
   }
 
-  const recipeText = card.innerText;
-
-  const detailUrl =
-    "http://localhost:3000/?recipe=" +
-    encodeURIComponent(recipeText);
-
-  function shareKakao(){
+function shareKakao(){
   Kakao.Share.sendDefault({
     objectType:"text",
     text:"AI 냉장고 레시피 테스트",
@@ -146,17 +140,7 @@ function shareKakao(){
       webUrl:window.location.origin
     }
   });
-},
-    buttons:[
-      {
-        title:"자세히 보기",
-        link:{
-          mobileWebUrl:detailUrl,
-          webUrl:detailUrl
-        }
-      }
-    ]
-  });
+}
 }
 window.addEventListener("load", function(){
   const params = new URLSearchParams(window.location.search);
