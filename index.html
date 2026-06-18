@@ -130,9 +130,6 @@ function getFoodImage(recipeText){
 function shareKakao(){
   alert("카카오 공유 함수 실행됨");
 
-function shareKakao(){
-  alert("카카오 공유 함수 실행됨");
-
   Kakao.Share.sendDefault({
     objectType:"text",
     text:"AI 냉장고 레시피 테스트",
@@ -141,7 +138,8 @@ function shareKakao(){
       webUrl:window.location.origin
     }
   });
-}indow.addEventListener("load", function(){
+}
+ window.addEventListener("load", function(){
   const params = new URLSearchParams(window.location.search);
   const recipe = params.get("recipe");
 
