@@ -136,13 +136,15 @@ function shareKakao(){
   }
 
   const recipeText = card.innerText;
+  const detailUrl =
+    window.location.origin + "/?recipe=" + encodeURIComponent(recipeText);
 
   Kakao.Share.sendDefault({
     objectType:"text",
     text:recipeText.substring(0, 180),
     link:{
-      mobileWebUrl:window.location.origin,
-      webUrl:window.location.origin
+      mobileWebUrl:detailUrl,
+      webUrl:detailUrl
     }
   });
 }
