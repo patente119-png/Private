@@ -136,6 +136,8 @@ function shareKakao(){
   }
 
   const recipeText = card.innerText;
+  const shortRecipe = recipeText.substring(0, 700);
+  
   const detailUrl =
     window.location.origin + "/?recipe=" + encodeURIComponent(recipeText);
 
